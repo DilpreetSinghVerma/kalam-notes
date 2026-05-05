@@ -56,12 +56,6 @@ You will need [Node.js](https://nodejs.org/) installed on your computer.
    ```
    *The compiled `.exe` installer will be located in the `dist-electron` folder.*
 
-## 🤝 Support the Project
-
-If you love writing with Kalam and want to support its ongoing development, consider buying me a coffee! 
-
-<a href="https://www.buymeacoffee.com/yourname" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
-
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/yourusername/kalam-notes/issues). If you want to add support for new languages (like Bengali, Gujarati, etc.), pull requests are highly encouraged.
