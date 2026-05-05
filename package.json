@@ -1,0 +1,57 @@
+{
+  "name": "notes",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "electron:start": "electron .",
+    "electron:build": "vite build && electron-builder"
+  },
+  "build": {
+    "appId": "com.dilpreet.kalam",
+    "productName": "Kalam Notes",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerSidebar": "build/installerSidebar.bmp"
+    }
+  },
+  "dependencies": {
+    "html2canvas": "^1.4.1",
+    "lucide-react": "^1.14.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "textarea-caret": "^3.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "electron": "^41.5.0",
+    "electron-builder": "^26.8.1",
+    "eslint": "^10.2.1",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.5.0",
+    "png-to-ico": "^3.0.1",
+    "sharp": "^0.34.5",
+    "vite": "^8.0.10"
+  }
+}
