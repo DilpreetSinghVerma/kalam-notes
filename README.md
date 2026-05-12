@@ -24,8 +24,8 @@ Say goodbye to clunky online translation tools. Kalam features intelligent, real
 *   🎨 **Gorgeous Interface:** A stunning, modern UI featuring a responsive grid for all your saved notes, complete with customizable Dark and Light themes.
 *   📏 **Adaptive Canvas:** Switch your page size dynamically between *Fluid Web, A4, A5, US Letter, and Mobile Screen* layouts.
 *   📤 **Professional Exports:** Instantly export your documents to high-quality PDF, Microsoft Word (.doc), Plain Text (.txt), or High-Resolution Images (.jpg).
-*   🛡️ **Offline First & Secure:** Your notes are automatically saved and stored securely on your local computer. No cloud accounts required!
-
+*   ☁️ **Cloud Sync with Google:** Sign in securely with your Google account to automatically sync your notes and custom dictionary across devices.
+*   🛡️ **Offline First:** No internet? No problem! Your notes are stored locally and will automatically sync when you come back online. Use it entirely without an account if you prefer privacy.
 ## 🚀 Getting Started
 
 ### Prerequisites
