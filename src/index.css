@@ -670,6 +670,14 @@ body {
   gap: 24px;
 }
 
+.notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
 .note-card {
   background: var(--panel-bg);
   border: 1px solid var(--border-line);
@@ -691,8 +699,15 @@ body {
 }
 
 .light-theme .note-card:hover {
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* Base Utility Classes */
 
 .note-card-title {
   font-size: 1.25rem;
@@ -757,28 +772,36 @@ body {
 
 .delete-card-btn {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  background: rgba(0,0,0,0.5);
+  top: 12px;
+  right: 12px;
+  background: rgba(2ef, 68, 68, 0.1);
+  color: #ef4444;
   border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  opacity: 0;
-  transition: all 0.2s ease;
   cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s;
+  z-index: 10;
 }
 
-.note-card:hover .delete-card-btn {
+.hover-show {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.note-card:hover .delete-card-btn,
+.note-card:hover .hover-show {
   opacity: 1;
 }
 
 .delete-card-btn:hover {
   background: #ef4444;
+  color: white;
   transform: scale(1.1);
 }
 

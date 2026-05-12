@@ -3,10 +3,10 @@ import {
   Bold, Italic, Underline, Strikethrough,
   AlignLeft, AlignCenter, AlignRight,
   List, ListOrdered, Indent, Outdent,
-  Heading1, Heading2, Type
+  Heading1, Heading2, Type, Undo, Redo, Image as ImageIcon
 } from 'lucide-react';
 
-const PunjabiEditor = ({ content, onChange, onOfflineStatus, pageSize = 'Fluid', language = 'punjabi' }) => {
+const PunjabiEditor = ({ content, onChange, onOfflineStatus, pageSize = 'Fluid', language = 'punjabi', dictionary = {} }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(0);
   const [currentWordIndex, setCurrentWordIndex] = useState({ start: -1, end: -1, node: null });
@@ -16,6 +16,23 @@ const PunjabiEditor = ({ content, onChange, onOfflineStatus, pageSize = 'Fluid',
   
   const editorRef = useRef(null);
   const suggestionCache = useRef({});
+  const fileInputRef = useRef(null);
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64 = event.target.result;
+        editorRef.current.focus();
+        document.execCommand('insertImage', false, base64);
+        if (editorRef.current) {
+          onChange(editorRef.current.innerHTML);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   useEffect(() => {
     // Only update innerHTML if it completely differs to prevent losing caret position while typing
@@ -209,13 +226,18 @@ const PunjabiEditor = ({ content, onChange, onOfflineStatus, pageSize = 'Fluid',
         
         const word = text.substring(start, end);
         if (word && /^[a-zA-Z]+$/.test(word)) {
+          if (dictionary[word.toLowerCase()] && language !== 'english') {
+            e.preventDefault();
+            applySuggestionDirect(dictionary[word.toLowerCase()], start, end, range.startContainer, e.key === ' ');
+            return;
+          }
           if (isOnline && language !== 'english') {
             e.preventDefault();
             const topSuggestion = await getTopSuggestion(word);
             if (topSuggestion) {
               applySuggestionDirect(topSuggestion, start, end, range.startContainer, e.key === ' ');
             } else {
-               document.execCommand('insertText', false, word + (e.key === ' ' ? ' ' : '\n'));
+               document.execCommand('insertText', false, e.key === ' ' ? ' ' : '\n');
             }
           }
           // If english or offline, do nothing and let the browser insert the space/newline naturally.
@@ -243,6 +265,10 @@ const PunjabiEditor = ({ content, onChange, onOfflineStatus, pageSize = 'Fluid',
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <div className="editor-toolbar" style={{ flexWrap: 'wrap' }}>
+         <input type="file" accept="image/*" ref={fileInputRef} onChange={handleImageUpload} style={{ display: 'none' }} />
+         <button className="format-btn" onClick={() => handleFormat('undo')} title="Undo"><Undo size={18} /></button>
+         <button className="format-btn" onClick={() => handleFormat('redo')} title="Redo"><Redo size={18} /></button>
+         <div className="toolbar-divider"></div>
          <button className="format-btn" onClick={() => handleFormatBlock('H1')} title="Heading 1"><Heading1 size={18} /></button>
          <button className="format-btn" onClick={() => handleFormatBlock('H2')} title="Heading 2"><Heading2 size={18} /></button>
          <button className="format-btn" onClick={() => handleFormatBlock('P')} title="Normal Text"><Type size={18} /></button>
@@ -260,6 +286,8 @@ const PunjabiEditor = ({ content, onChange, onOfflineStatus, pageSize = 'Fluid',
          <button className="format-btn" onClick={() => handleFormat('insertOrderedList')} title="Numbered List"><ListOrdered size={18} /></button>
          <button className="format-btn" onClick={() => handleFormat('outdent')} title="Decrease Indent"><Outdent size={18} /></button>
          <button className="format-btn" onClick={() => handleFormat('indent')} title="Increase Indent"><Indent size={18} /></button>
+         <div className="toolbar-divider"></div>
+         <button className="format-btn" onClick={() => fileInputRef.current.click()} title="Insert Image"><ImageIcon size={18} /></button>
       </div>
 
       <div className="editor-scroller" style={{ flex: 1, overflowY: 'auto', background: pageSize !== 'Fluid' ? 'var(--panel-bg)' : 'transparent' }}>
