@@ -126,6 +126,8 @@ function App() {
           // If the update came from the server (not a local pending write)
           if (docSnap.exists() && !docSnap.metadata.hasPendingWrites) {
             isUpdatingFromCloud.current = true;
+            hasLoadedFromCloud.current = true; // Mark as successfully loaded
+            
             const data = docSnap.data();
             if (data.notes && data.notes.length > 0) setNotes(data.notes);
             if (data.dictionary) setDictionary(data.dictionary);
@@ -135,6 +137,9 @@ function App() {
             setTimeout(() => {
                isUpdatingFromCloud.current = false;
             }, 1000);
+          } else if (!docSnap.exists()) {
+             // If document doesn't exist yet (first time user), still allow saving future changes
+             hasLoadedFromCloud.current = true;
           }
         });
       }
@@ -152,6 +157,8 @@ function App() {
     if (purged.length !== trash.length) setTrash(purged);
   }, []);
 
+  const hasLoadedFromCloud = useRef(false);
+
   useEffect(() => {
     if (window.require) {
       try {
@@ -163,7 +170,10 @@ function App() {
     localStorage.setItem('kalam_dictionary', JSON.stringify(dictionary));
     localStorage.setItem('kalam_trash', JSON.stringify(trash));
 
-    if (user && !isLoading && !isUpdatingFromCloud.current) {
+    // Only save to cloud if we're not currently receiving an update from the cloud,
+    // AND we have already successfully loaded the initial state from the cloud at least once.
+    // This prevents the PC app from immediately overwriting mobile app data on startup.
+    if (user && !isLoading && !isUpdatingFromCloud.current && hasLoadedFromCloud.current) {
       setIsSyncing(true);
       setDoc(doc(db, 'users', user.uid), { notes, dictionary, trash }, { merge: true })
         .then(() => setIsSyncing(false))
